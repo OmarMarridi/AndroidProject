@@ -8,36 +8,81 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import static edu.birzeit.androidproject.R.styleable.View;
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+
 
 public class LoginActivity extends AppCompatActivity {
-    private final String username="omarmarridi@admin.com";//admin username
-    private final String password="qwerty123";//admin password
+    private static final String url = "http://192.168.1.240:80/android-server/user_authentication.php";
+    private RequestQueue requestQueue;
+    private StringRequest request;
+    private final String username = "o";//admin username
+    private final String password = "1";//admin password
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         Button login = (Button) findViewById(R.id.button);
+        requestQueue = Volley.newRequestQueue(this);
+        final EditText user_name = (EditText) findViewById(R.id.editText);
+        final EditText user_password = (EditText) findViewById(R.id.editText2);
+        final TextView alert = (TextView) findViewById(R.id.textView);
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EditText user_name = (EditText) findViewById(R.id.editText);
-                EditText user_password = (EditText) findViewById(R.id.editText2);
-                if(user_name.getText().toString().equals(username)&&user_password.getText().toString().equals(password)){
-                    Intent intent= new Intent(LoginActivity.this,AdminActivity.class);
+                if (user_name.getText().toString().equals(username) && user_password.getText().toString().equals(password)) {
+                    Intent intent = new Intent(LoginActivity.this, AdminActivity.class);
                     startActivity(intent);
                     finish();
-                }
-              /*  else if((user_name.getText()!=null)&&(user_password.getText()!=null)){
-                        //check user validty ,create sql table for offers,link offers with users,offer contain array of pic and detail
+                } else if (user_name.getText().toString() != null && user_password.getText().toString() != null && !user_name.getText().toString().isEmpty() && !user_password.getText().toString().isEmpty()) {
+                    request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            try {
+                                JSONObject jsonObject = new JSONObject(response);
+                                if (jsonObject.names().get(0).equals("match")) {
+                                    Intent intent = new Intent(LoginActivity.this, SuperMarketActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                } else if(jsonObject.names().get(0).equals("fail")){
+                                        alert.setText("Authentication Failed, Check username or Internet");
+                                }else {
+                                    alert.setText("Authentication Failed, Check username or Internet");
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
 
-                }
-                */
-                     else{
-                    TextView alert=(TextView) findViewById(R.id.textView);
-                    alert.setText("User Information Incorrect! Check your Internet Connection");
-                }
+                        }
+                    }) {
+                        @Override
+                        protected Map<String, String> getParams() throws AuthFailureError {
+                            HashMap<String, String> hashMap = new HashMap<String, String>();
+                            hashMap.put("email", user_name.getText().toString());
+                            hashMap.put("password", user_password.getText().toString());
+                            return hashMap;
+                        }
+                    };
+                    requestQueue.add(request);
+                }else{alert.setText("Authentication Failed");}
             }
+
         });
 
     }

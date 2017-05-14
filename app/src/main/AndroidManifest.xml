@@ -23,6 +23,7 @@
         </activity>
         <activity android:name=".DeleteAccount"></activity>
         <activity android:name=".ShowUsers"></activity>
+        <activity android:name=".SuperMarketActivity"></activity>
     </application>
 
 </manifest>
