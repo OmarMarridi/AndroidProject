@@ -84,7 +84,7 @@ public class ShowUsers extends AppCompatActivity{
             @Override
             protected String doInBackground(String... params) {
                 DefaultHttpClient httpclient = new DefaultHttpClient(new BasicHttpParams());
-                HttpPost httppost = new HttpPost("http://192.168.1.240:80/android-server/download_users.php");
+                HttpPost httppost = new HttpPost("http://192.168.1.240:2000/android-server/download_users.php");
 
                 // Depends on your web service
                 httppost.setHeader("Content-type", "application/json");

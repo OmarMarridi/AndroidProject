@@ -27,7 +27,7 @@ import java.util.Map;
  */
 
 public class DeleteAccount extends AppCompatActivity {
-    private static final String url="http://192.168.1.240:80/android-server/delete_account.php";
+    private static final String url="http://192.168.1.240:2000/android-server/delete_account.php";
     private RequestQueue requestQueue;
     private StringRequest request;
     @Override

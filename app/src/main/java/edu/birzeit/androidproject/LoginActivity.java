@@ -24,11 +24,12 @@ import java.util.Map;
 
 
 public class LoginActivity extends AppCompatActivity {
-    private static final String url = "http://192.168.1.240:80/android-server/user_authentication.php";
+    private static final String url = "http://192.168.1.240:2000/android-server/user_authentication.php";
     private RequestQueue requestQueue;
     private StringRequest request;
     private final String username = "o";//admin username
     private final String password = "1";//admin password
+    private String dummy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +54,10 @@ public class LoginActivity extends AppCompatActivity {
                             try {
                                 JSONObject jsonObject = new JSONObject(response);
                                 if (jsonObject.names().get(0).equals("match")) {
+                                    dummy=user_name.getText().toString();
                                     Intent intent = new Intent(LoginActivity.this, SuperMarketActivity.class);
+
+                                    intent.putExtra("username",dummy);
                                     startActivity(intent);
                                     finish();
                                 } else if(jsonObject.names().get(0).equals("fail")){

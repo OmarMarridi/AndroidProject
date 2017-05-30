@@ -27,7 +27,7 @@ import java.util.Map;
  * Created by OmarMarridi on 5/5/2017.
  */
 public class CreateAccount extends AppCompatActivity {
-    private static final String url="http://192.168.1.240:80/android-server/create_account.php";
+    private static final String url="http://192.168.1.240:2000/android-server/create_account.php";
     private RequestQueue requestQueue;
     private StringRequest request;
     protected void onCreate(Bundle savedInstanceState) {
